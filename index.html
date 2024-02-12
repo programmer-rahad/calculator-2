@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title> Calculator using html, css and javascript ( Wednesday, 30 June 2021 )</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      .calculator {
+        margin-top: 80px;
+        margin-bottom: 60px;
+        border: 1px solid #ddd;
+        box-sizing: content-box;
+        padding: 20px;
+        padding-bottom: 18px;
+        width: 354px;
+        margin-left: auto;
+        margin-right: auto;
+      }
+      .output {
+        width: 354px;
+        height: 70px;
+        margin-bottom: 15px;
+        box-shadow: inset 0px 0px 5px 1px rgb(0 0 0 / 14%);
+        line-height: 70px;
+        font-size: 35px;
+        text-align: right;
+        padding-right: 15px;
+      }
+      .buttons {
+        overflow: hidden;
+        padding-left: 2px;
+        padding-top: 2px;
+      }
+      button {
+        width: 80px;
+        height: 55px;
+        border: 1px solid #bbb;
+        float: left;
+        background-color: #f9f9f9;
+        font-weight: 700;
+        cursor: pointer;
+        font-size: 25px;
+      } 
+      button:hover {
+        box-shadow: 0px 1px 4px 0px rgb(0 0 0 / 20%);
+      }
+      button:focus {
+        transform: scale(1.05);
+        background-color: #eee
+      }
+      button.equal {
+        height: calc(55 * 4px + 30px);
+        background-color: #307cf9;
+        float: right;
+        color: #fff;
+        font-size: 30px;
+        transform: none!important;
+      }
+      button.equal:hover {
+        background-color: #1b68e6;
+      }
+      button:nth-child(1),
+      button:nth-child(2),
+      button:nth-child(3),
+      button:nth-child(4) {
+        background-color: #eee;
+      }
+      button:nth-child(2) {
+        margin-left: 10px;
+        margin-right: 10px;
+      }
+      button:nth-child(4) {
+        margin-left: 10px;
+        margin-bottom: 10px;
+      }
+      button:nth-child(14),
+      button:nth-child(11),
+      button:nth-child(7) {
+        margin-bottom: 10px;
+      }
+      button:nth-child(16),
+      button:nth-child(15),
+      button:nth-child(14),
+      button:nth-child(13),
+      button:nth-child(12),
+      button:nth-child(10),
+      button:nth-child(9),
+      button:nth-child(5),
+      button:nth-child(6) {
+        margin-right: 10px;
+      }
+      button:last-child {
+        margin-bottom: 2px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="calculator">
+      <div class="output"></div>
+      <div class="buttons">
+        <button>+</button>
+        <button>-</button>
+        <button data-val="*">×</button>
+        <button data-val="/">÷</button>
+        <button>7</button>
+        <button>8</button>
+        <button>9</button>
+        <button class="equal">=</button>
+        <button>4</button>
+        <button>5</button>
+        <button>6</button>
+        <button>1</button>
+        <button>2</button>
+        <button>3</button>
+        <button>0</button>
+        <button>.</button>
+        <button>C</button>
+      </div>
+    </div>
+    <script>
+      const output = document.querySelector(".output");
+      const buttons = document.querySelectorAll("button");
+      let reset;
+      let calculation = "";
+      for (let i = 0; i < buttons.length; i++) {
+        buttons[i].addEventListener("click", function () {
+          const buttonValue = this.innerHTML;
+          if (buttonValue === "." && calculation.includes(".")) return;
+          if (
+            buttonValue === "×" ||
+            buttonValue === "÷" ||
+            buttonValue === "+" ||
+            buttonValue === "-"
+          ) {
+            const html = output.innerHTML;
+            const htmlLength = html.length;
+            if (
+              reset ||
+              !html ||
+              html[htmlLength - 1] === "×" ||
+              html[htmlLength - 1] === "÷" ||
+              html[htmlLength - 1] === "+" ||
+              html[htmlLength - 1] === "-"
+            ) {
+              return;
+            }
+            console.log(output.innerHTML);
+          }
+          if (reset) {
+            output.innerHTML = "";
+            reset = false;
+          }
+          if (buttons[i].innerHTML === "=") {
+            if (
+              calculation[calculation.length - 1] === "×" ||
+              calculation[calculation.length - 1] === "÷" ||
+              calculation[calculation.length - 1] === "+" ||
+              calculation[calculation.length - 1] === "-"
+            ) {
+              calculation = calculation.slice(0, -1);
+            }
+            if (!calculation) return;
+            calculation = calculation.replace("×", "*").replace("÷", "/");
+            output.innerHTML = eval(calculation);
+            reset = true;
+            return;
+          }
+          output.innerHTML += buttons[i].innerHTML;
+          calculation = output.innerHTML;
+          if (this.innerHTML === "C") {
+            output.innerHTML = "";
+            calculation = output.innerHTML;
+          }
+        });
+      }
+    </script>
+  </body>
+</html>
